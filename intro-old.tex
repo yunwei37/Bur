@@ -1,0 +1,41 @@
+\section{Introduction}
+The Extended Berkeley Packet Filter (eBPF) framework has evolved as a fundamental element in modern kernel programming, providing a streamlined approach to execute user-defined programs within the kernel's privileged domain. Initially designed for networking tasks, eBPF has expanded its horizons to include various kernel subsystems, facilitating performance monitoring, security enforcement, and more. Operating within the kernel, eBPF enables quick observability and data collection. However, it comes with certain performance and security drawbacks. Notably, the context switch overheads associated with Uprobe components hinder performance, while the required privilege access could broaden the kernel attack surface, potentially leading to container escapes\cite{he2023cross} or kernel exploits\cite{lim2023unleashing}. These challenges prompted the exploration of userspace eBPF runtimes, aiming to leverage the advantages of eBPF while addressing its downsides.
+
+The transition towards userspace eBPF began with projects like uBPF\cite{ubpf} and rbpf\cite{rbpf}. Although groundbreaking, these projects faced hurdles regarding performance, flexibility, and feature support. For instance, these early userspace runtimes lacked essential attach facilities like uprobes and syscalls, required manual compilation and program restarts for integration, and had an insufficient hashmap implementation. They also necessitated specific toolchains for program development, thereby posing barriers to wider adoption and showing limited kernel compatibility. Despite these shortcomings, they demonstrated the potential and emphasized the need for a more robust, performance-optimized, and feature-rich userspace eBPF runtime. The employment of userspace eBPF in significant projects further highlighted its benefits and the urgency for refined userspace eBPF runtimes. For example, DPDK utilized userspace eBPF to improve flexibility and performance in network processing\cite{dpdk-ebpf}, while the ongoing eBPF for Windows\cite{windows-ebpf} project displayed the cross-platform potential of eBPF, suggesting a substantial extension in applications from network processing to blockchain smart contract execution. This range of applications, along with the limitations of existing userspace runtimes, paved the way for a more advanced solution. Papers like RapidPatch\cite{he2022rapidpatch} and Femto-Containers\cite{zandberg2022femto} unveiled frameworks for patch propagation and secure deployment on embedded and IoT devices respectively, further displaying eBPF's versatile applications. These practical projects and scholarly discussions collectively highlight the urgent need for a sophisticated userspace eBPF runtime like bpftime, aimed at surmounting the identified challenges and fostering further integration and adoption of userspace eBPF across varied applications.
+
+Introducing bpftime—a cutting-edge userspace eBPF runtime developed on the foundation of LLVM's JIT/AOT technology, addressing the earlier identified challenges while significantly enhancing the performance of Uprobe and Syscall hooks. Unlike its forerunners, bpftime not only boosts Uprobe execution speed to more than 10x but also pioneers in providing programmatic Syscall hooking, shared memory maps, and a smooth interface with popular eBPF toolchains such as libbpf and clang. Remarkably, this runtime can be incorporated into any ongoing process without requiring a restart or manual recompilation, showcasing the much-needed flexibility and ease of integration.
+
+In summary, the key contributions from our work include:
+
+% \yusheng{I think we may need to reconsider the contributions?}
+
+% \yusheng{This is the old ones:}
+
+% \begin{enumerate}
+%     \item \textbf{High-Performance Userspace eBPF Runtime}: 
+%     We unveil \textit{bpftime}, a fresh userspace eBPF runtime, that markedly elevates the performance of uprobes and syscall hooks. Through an innovative binary rewriting technique, it achieves a substantial more than 10x reduction in Uprobe overhead when compared to kernel uprobes. It can also work together with kernel eBPF runtime for more complex usecases.
+
+%     \item \textbf{Programmatic Syscall Hooking and Seamless Runtime Injection}: 
+%     Bpftime enables proficient programmatic syscall hooking within a process, a leap in technological advancement. Additionally, it supports seamless runtime injection into any running process, eliminating the need for cumbersome restarts or manual recompilation. \yusheng{This is not our main contribution. Syscall Hooking and Runtime Injection are existing technologies.} 
+
+%     \item \textbf{Enhanced Compatibility and Extensible Feature Set}:
+%     Our endeavor retains compatibility with existing eBPF toolchains like clang and libbpf, thereby simplifying userspace eBPF development. Moreover, we introduce novel features including shared memory maps and JIT support, broadening bpftime's scope and adaptability in real-world scenarios.
+% \end{enumerate}
+
+% \yusheng{I think contributions may be related to the below part. It's just draft and I'm not sure about that...}
+
+\begin{enumerate}
+    \item \textbf{High-Performance, general-purpose Userspace eBPF Runtime compatibility with existing eBPF echosystem}: 
+    We unveil \textit{bpftime}, a fresh userspace eBPF runtime, with a fast LLVM JIT and share-memory maps. Our endeavor retains compatibility with existing eBPF toolchains and libraries like clang and libbpf, and can run existing eBPF applications without modification.
+
+    \item \textbf{Programmatic attaching mechanism and Seamless Runtime Injection for userspace eBPF}: 
+    Bpftime enables proficient programmatic syscall hooking and uprobe attaching within a process, compatible with kernel eBPF. Additionally, it supports seamless runtime injection into any running process, eliminating the need for cumbersome restarts or manual recompilation. Through an innovative binary rewriting technique, it achieves a substantial more than 10x reduction in Uprobe overhead when compared to kernel uprobes.
+
+    \item \textbf{Working together with kernel eBPF and Extensible Feature Set}: Enable seamless load userspace eBPF from kernel, and using kernel eBPF maps to cooperate with kernel eBPF programs. It can also support new eBPF types from kernel eBPF, especially the  FUSE BPF filter types for better supporting the userspace filesystem helper function.
+\end{enumerate}
+
+%Operating system specialization, in which a developer customizes their operating system by injecting new logic, is a fundamental tool for the modern system developer.  Prior efforts from industry and academia have shown the power for operating system specialization to accelerate file-systems~\cite{Zhong22}, networking I/O~\cite{Jorgensen18}, and server applications~\arq{TODO citation}.  Other efforts use operating system specialization to tailor their design for emerging hardware devices or interfaces~\cite{demikernel}.  Finally, a myriad of systems specialize operating system behavior to monitor applications to validate performance~\arq{TODO citation}, audit potential security threads~\arq{TODO citation}, or even provide stronger isolation~\arq{TODO citation}.
+
+%Today, the de facto mechanism for operating system specialization is the extended Berkeley Packet Filter (eBPF) ecosystem.  Originally designed to inject custom packet processing logic into a kernel, eBPF enables nearly-arbitrary user-code to execute before or after most kernel function calls or function returns.  eBPF includes a verifier that ensures that user-injected code is safe, in that it is guaranteed to terminate, perform only valid instructions, and only access safe memory locations.  The eBPF ecosystem is now fully supported in linux~\cite{lwn-ebpf} and Windows~\cite{windows-ebpf}, and there are calls to add eBPF support to MacOS~\arq{TODO citation}. Our code is open-sourced at \href{https://github.com/eunomia-bpf/bpftime}{https://github.com/eunomia-bpf/bpftime}.
+
+

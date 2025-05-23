@@ -1,0 +1,757 @@
+@article{zarkadas2023bpf,
+  title={BPF-oF: Storage Function Pushdown Over the Network},
+  author={Zarkadas, Ioannis and Zussman, Tal and Carin, Jeremy and Jiang, Sheng and Zhong, Yuhong and Pfefferle, Jonas and Franke, Hubertus and Yang, Junfeng and Kaffes, Kostis and Stutsman, Ryan and others},
+  journal={arXiv preprint arXiv:2312.06808},
+  year={2023}
+}
+@inproceedings{yang2023heels,
+  title={HEELS: A Host-Enabled eBPF-Based Load Balancing Scheme},
+  author={Yang, Rui and Kogias, Marios},
+  booktitle={Proceedings of the 1st Workshop on eBPF and Kernel Extensions},
+  pages={77--83},
+  year={2023}
+}
+@inproceedings{humphries2021case,
+  title={A case against (most) context switches},
+  author={Humphries, Jack Tigar and Kaffes, Kostis and Mazi{\`e}res, David and Kozyrakis, Christos},
+  booktitle={Proceedings of the Workshop on Hot Topics in Operating Systems},
+  pages={17--25},
+  year={2021}
+}
+@inproceedings{zhou2023userspace,
+  title={Userspace Bypass: Accelerating Syscall-intensive Applications},
+  author={Zhou, Zhe and Bi, Yanxiang and Wan, Junpeng and Zhou, Yangfan and Li, Zhou},
+  booktitle={17th USENIX Symposium on Operating Systems Design and Implementation (OSDI 23)},
+  pages={33--49},
+  year={2023}
+}
+@article{butrovich23,
+  author = {Butrovich, Matthew and Ramanathan, Karthik and Rollinson, John and Lim, Wan Shen and Zhang, William and Sherry, Justine and Pavlo, Andrew},
+  title = {Tigger: A Database Proxy That Bounces With User-Bypass},
+  journal = {Proc. {VLDB} Endow.},
+  volume = {16},
+  number = {11},
+  pages = {3335--3348},
+  year = {2023},
+  url = {https://www.vldb.org/pvldb/vol16/p3335-butrovich.pdf},
+ }
+@misc{zheng2023bpftime,
+      title={bpftime: userspace eBPF Runtime for Uprobe, Syscall and Kernel-User Interactions}, 
+      author={Yusheng Zheng and Tong Yu and Yiwei Yang and Yanpeng Hu and XiaoZheng Lai and Andrew Quinn},
+      year={2023},
+      eprint={2311.07923},
+      archivePrefix={arXiv},
+      primaryClass={cs.OS}
+}
+@inproceedings{lim2023unleashing,
+  title={Unleashing Unprivileged eBPF Potential with Dynamic Sandboxing},
+  author={Lim, Soo Yee and Han, Xueyuan and Pasquier, Thomas},
+  booktitle={Proceedings of the 1st Workshop on eBPF and Kernel Extensions},
+  pages={42--48},
+  year={2023}
+}
+@inproceedings{he2023cross,
+  title={Cross Container Attacks: The Bewildered $\{$eBPF$\}$ on Clouds},
+  author={He, Yi and Guo, Roland and Xing, Yunlong and Che, Xijia and Sun, Kun and Liu, Zhuotao and Xu, Ke and Li, Qi},
+  booktitle={32nd USENIX Security Symposium (USENIX Security 23)},
+  pages={5971--5988},
+  year={2023}
+}
+@misc{cet-ibt,
+  author = {Jonathan Corbet},
+  title = {Indirect branch tracking for Intel CPUs},
+  note={\url{https://lwn.net/Articles/889475/}}
+}
+@misc{cet,
+  author = {Intel Team},
+  title = {A Technical Look at Intel’s Control-flow Enforcement Technology},
+  note={\url{https://www.intel.com/content/www/us/en/developer/articles/technical/technical-look-control-flow-enforcement-technology.html}}
+}
+@misc{arm-dm,
+  author = {Arm Team},
+  title = {Memory access permissions and domains},
+  note={\url{https://developer.arm.com/documentation/dui0056/d/caches-and-tightly-coupled-memories/memory-management-units/memory-access-permissions-and-domains}}
+}
+@inproceedings{yang2023heels,
+  title={HEELS: A Host-Enabled eBPF-Based Load Balancing Scheme},
+  author={Yang, Rui and Kogias, Marios},
+  booktitle={Proceedings of the 1st Workshop on eBPF and Kernel Extensions},
+  pages={77--83},
+  year={2023}
+}
+@misc{rbpf,
+  author = {qmonnet},
+  title = {Rust virtual machine and JIT compiler for eBPF programs},
+  note={\url{https://github.com/qmonnet/rbpf}}
+}
+@misc{ubpf,
+  author = {iovisor},
+  title = {Userspace eBPF VM},
+  note={\url{https://github.com/iovisor/ubpf}}
+}
+@misc{redis-bench,
+  author = {Redis Team},
+  title = {Redis Benchmark},
+  note={\url{https://redis.io/docs/management/optimization/benchmarks/}}
+}
+@misc{dpdk-ebpf,
+  author = {iovisor},
+  title = {Userspace eBPF VM},
+  note={\url{https://doc.dpdk.org/guides/prog_guide/bpf_lib.html}}
+}
+@misc{windows-ebpf,
+  author = {microsoft},
+  title = {eBPF for Windows},
+  note={\url{https://github.com/microsoft/ebpf-for-windows}}
+}
+
+@misc{uprobe,
+  author = {brendangregg},
+  title = {Linux uprobe: User-Level Dynamic Tracing},
+  note={\url{https://www.brendangregg.com/blog/2015-06-28/linux-ftrace-uprobe.html}}
+}
+
+@misc{linuxverifier,
+  author = {linux maintainers},
+  title = {eBPF verifier in Linux kernel},
+  note={\url{https://docs.kernel.org/bpf/verifier.html}}
+}
+
+@misc{ecapture,
+  author = {gojue},
+  title = {Capture SSL/TLS text content without a CA certificate using eBPF},
+  note={\url{https://github.com/gojue/ecapture}}
+}
+
+@misc{bpfd,
+  author = {bpfd-dev},
+  title = {A daemon and kubernetes operator for managing BPF programs},
+  note={\url{https://github.com/bpfd-dev/bpfd}}
+}
+
+@inproceedings{he2022rapidpatch,
+  title={$\{$RapidPatch$\}$: Firmware Hotpatching for $\{$Real-Time$\}$ Embedded Devices},
+  author={He, Yi and Zou, Zhenhua and Sun, Kun and Liu, Zhuotao and Xu, Ke and Wang, Qian and Shen, Chao and Wang, Zhi and Li, Qi},
+  booktitle={31st USENIX Security Symposium (USENIX Security 22)},
+  pages={2225--2242},
+  year={2022}
+}
+@inproceedings{zandberg2022femto,
+  title={Femto-Containers: Lightweight virtualization and fault isolation for small software functions on low-power IoT microcontrollers},
+  author={Zandberg, Koen and Baccelli, Emmanuel and Yuan, Shenghao and Besson, Fr{\'e}d{\'e}ric and Talpin, Jean-Pierre},
+  booktitle={Proceedings of the 23rd ACM/IFIP International Middleware Conference},
+  pages={161--173},
+  year={2022}
+}
+@inproceedings{shen2023network,
+  title={Network-Centric Distributed Tracing with DeepFlow: Troubleshooting Your Microservices in Zero Code},
+  author={Shen, Junxian and Zhang, Han and Xiang, Yang and Shi, Xingang and Li, Xinrui and Shen, Yunxi and Zhang, Zijian and Wu, Yongxiang and Yin, Xia and Wang, Jilong and others},
+  booktitle={Proceedings of the ACM SIGCOMM 2023 Conference},
+  pages={420--437},
+  year={2023}
+}
+@inproceedings{keniston2007ptrace,
+  title={Ptrace, utrace, uprobes: Lightweight, dynamic tracing of user apps},
+  author={Keniston, Jim and Mavinakayanahalli, Ananth and Panchamukhi, Prasanna and Prasad, Vara},
+  booktitle={Proceedings of the 2007 Linux symposium},
+  pages={215--224},
+  year={2007}
+}
+@misc{ebpf-exporter,
+    author = {Cloudflare},
+    title = {ebpf\_exporter: eBPF-based exporter for Prometheus},
+    year = {2023},
+    note = {\url{https://github.com/cloudflare/ebpf_exporter}},
+    howpublished = {GitHub repository}
+}
+
+@misc{bpftrace,
+    author = {IO Visor},
+    title = {bpftrace: High-level tracing language for Linux eBPF},
+    year = {2023},
+    note = {\url{https://github.com/iovisor/bpftrace}},
+    howpublished = {GitHub repository}
+}
+@misc{bcc,
+  author = {IO Visor Project},
+  title = {BPF Compiler Collection (bcc)},
+  year = {2023},
+  note = {Available: \url{https://github.com/iovisor/bcc}},
+}
+@inproceedings {Zhong22,
+author = {Yuhong Zhong and Haoyu Li and Yu Jian Wu and Ioannis Zarkadas and Jeffrey Tao and Evan Mesterhazy and Michael Makris and Junfeng Yang and Amy Tai and Ryan Stutsman and Asaf Cidon},
+title = {{XRP}: {In-Kernel} Storage Functions with {eBPF}},
+booktitle = {16th USENIX Symposium on Operating Systems Design and Implementation (OSDI 22)},
+year = {2022},
+isbn = {978-1-939133-28-1},
+address = {Carlsbad, CA},
+pages = {375--393},
+url = {https://www.usenix.org/conference/osdi22/presentation/zhong},
+publisher = {USENIX Association},
+month = jul
+}
+
+@inproceedings{yasukata2023zpoline,
+  title={zpoline: a system call hook mechanism based on binary rewriting},
+  author={Yasukata, Kenichi and Tazaki, Hajime and Aublin, Pierre-Louis and Ishiguro, Kenta},
+  booktitle={2023 USENIX Annual Technical Conference (USENIX ATC 23)},
+  pages={293--300},
+  year={2023}
+}
+
+@misc{fridagum,
+  author = {frida},
+  title = {Cross-platform instrumentation and introspection library written in C},
+  note={\url{https://github.com/frida/frida-gum}}
+}
+
+@misc{syscount,
+  author = {BCC Authors}, 
+  title = {syscount},
+  note={\url{https://github.com/iovisor/bcc/blob/master/libbpf-tools/syscount.c}}
+}
+
+@misc{bpfconformance,
+  title = {Cross-platform instrumentation and introspection library written in C},
+  author = {Alan Jowett},
+  note={\url{https://github.com/Alan-Jowett/bpf_conformance/}}
+}
+
+@misc{libcapstone,
+  author = {libcapstone Authors},
+  title = {libcapstone is a disassembly library.},
+  note={\url{https://github.com/libcapstone/libcapstone}}
+}
+
+
+@misc{dynamorio,
+  author = {DynamoRIO},
+  title = {Dynamic Instrumentation Tool Platform},
+  note={\url{https://github.com/DynamoRIO/dynamorio}}
+}
+
+@INPROCEEDINGS{LoggerFS,
+  author={Mazumder, Biswajit and Hallstrom, Jason O.},
+  booktitle={2016 International Conference on Embedded Software (EMSOFT)}, 
+  title={A fast, lightweight, and reliable file system for wireless sensor networks}, 
+  year={2016},
+  volume={},
+  number={},
+  pages={1-10},
+  doi={10.1145/2968478.2968486}}
+
+
+@INPROCEEDINGS{1550984,
+  author={Patil, H. and Cohn, R. and Charney, M. and Kapoor, R. and Sun, A. and Karunanidhi, A.},
+  booktitle={37th International Symposium on Microarchitecture (MICRO-37'04)}, 
+  title={Pinpointing Representative Portions of Large Intel ® Itanium ® Programs with Dynamic Instrumentation}, 
+  year={2004},
+  volume={},
+  number={},
+  pages={81-92},
+  doi={10.1109/MICRO.2004.28}
+}
+
+@misc{webassembly,
+  author = {WebAssembly Authors},
+  title = {WebAssembly Specifications},
+  note={\url{https://webassembly.github.io/spec/}}
+}
+
+@misc{lwn-ebpf,
+  author = {eBPF Authors},
+  title = {A thorough introduction to eBPF},
+  note={\url{https://lwn.net/Articles/740157/}}
+}
+
+@article{femto,
+  title={Femto-containers: Devops on microcontrollers with lightweight virtualization \& isolation for iot software modules},
+  author={Zandberg, Koen and Baccelli, Emmanuel},
+  journal={arXiv preprint arXiv:2106.12553},
+  year={2021}
+}
+
+@inproceedings {rapidpatch,
+author = {Yi He and Zhenhua Zou and Kun Sun and Zhuotao Liu and Ke Xu and Qian Wang and Chao Shen and Zhi Wang and Qi Li},
+title = {{RapidPatch}: Firmware Hotpatching for {Real-Time} Embedded Devices},
+booktitle = {31st USENIX Security Symposium (USENIX Security 22)},
+year = {2022},
+isbn = {978-1-939133-31-1},
+address = {Boston, MA},
+pages = {2225--2242},
+url = {https://www.usenix.org/conference/usenixsecurity22/presentation/he-yi},
+publisher = {USENIX Association},
+month = aug
+}
+
+@inproceedings{Jorgensen18,
+author = {H\o{}iland-J\o{}rgensen, Toke and Brouer, Jesper Dangaard and Borkmann, Daniel and Fastabend, John and Herbert, Tom and Ahern, David and Miller, David},
+title = {The EXpress Data Path: Fast Programmable Packet Processing in the Operating System Kernel},
+year = {2018},
+isbn = {9781450360807},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3281411.3281443},
+doi = {10.1145/3281411.3281443},
+pages = {54–66},
+numpages = {13},
+keywords = {DPDK, BPF, programmable networking, XDP},
+location = {Heraklion, Greece},
+series = {CoNEXT '18}
+}
+
+@article{delshadtehrani2020efficient,
+  title={Efficient sealable protection keys for RISC-V},
+  author={Delshadtehrani, Leila and Canakci, Sadullah and Egele, Manuel and Joshi, Ajay},
+  journal={arXiv preprint arXiv:2012.02715},
+  year={2020}
+}
+
+@inproceedings{peng2023muswitch,
+  title={$\mu$Switch: Fast Kernel Context Isolation with Implicit Context Switches},
+  author={Peng, Dinglan and Liu, Congyu and Palit, Tapti and Fonseca, Pedro and Vahldiek-Oberwagner, Anjo and Vij, Mona},
+  booktitle={2023 IEEE Symposium on Security and Privacy (SP)},
+  pages={2956--2973},
+  year={2023},
+  organization={IEEE}
+}
+@article{gaidis2023fineibt,
+  title={FineIBT: Fine-grain Control-flow Enforcement with Indirect Branch Tracking},
+  author={Gaidis, Alexander J and Moreira, Joao and Sun, Ke and Milburn, Alyssa and Atlidakis, Vaggelis and Kemerlis, Vasileios P},
+  journal={arXiv preprint arXiv:2303.16353},
+  year={2023}
+}
+@inproceedings{xie2022cetis,
+  title={CETIS: Retrofitting Intel CET for generic and efficient intra-process memory isolation},
+  author={Xie, Mengyao and Wu, Chenggang and Zhang, Yinqian and Xu, Jiali and Lai, Yuanming and Kang, Yan and Wang, Wei and Wang, Zhe},
+  booktitle={Proceedings of the 2022 ACM SIGSAC Conference on Computer and Communications Security},
+  pages={2989--3002},
+  year={2022}
+}
+
+
+@inproceedings{Jia23,
+author = {Jia, Jinghao and Le, Michael V. and Ahmed, Salman and Williams, Dan and Jamjoom, Hani},
+title = {Practical and Flexible Kernel CFI Enforcement Using EBPF},
+year = {2023},
+isbn = {9798400702938},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3609021.3609293},
+doi = {10.1145/3609021.3609293},
+booktitle = {Proceedings of the 1st Workshop on EBPF and Kernel Extensions},
+pages = {84–85},
+numpages = {2},
+keywords = {context-sensitive, eBPF, CFI, targeted, on-demand},
+location = {New York, NY, USA},
+series = {eBPF '23}
+}
+
+
+@unpublished{Gregg19,
+author = {Brendan Gregg},
+title = {BPF performance Analysis at Netflix},
+year = {2019},
+note={AWS re:Invent},
+url = {https://www.brendangregg.com/Slides/reInvent2019_BPF_Performance_Analysis/}
+}
+
+
+@inproceedings{Ghigoff21,
+  title={$\{$BMC$\}$: Accelerating Memcached using Safe In-kernel Caching and Pre-stack Processing},
+  author={Ghigoff, Yoann and Sopena, Julien and Lazri, Kahina and Blin, Antoine and Muller, Gilles},
+  booktitle={18th USENIX Symposium on Networked Systems Design and Implementation (NSDI 21)},
+  pages={487--501},
+  year={2021}
+}
+
+
+@inproceedings{Nethercote07,
+author = {Nicholas Nethercote and Julian Seward},
+title = {Valgrind: A Framework for Heavyweight Dynamic Binary Instrumentation},
+booktitle = PLDI07,
+address = {San Diego, CA},
+month = {June},
+year = {2007},
+}
+
+
+
+@inproceedings{Luk05,
+  author =	 {Chi-Keung Luk and Robert Cohn and Robert Muth and
+                  Harish Patil and Artur Klauser and Geoff Lowney and
+                  Steven Wallace and Vijay Janapa Reddi and Kim
+                  Hazelwood},
+  title =	 {Pin: Building Customized Program Analysis Tools with
+                  Dynamic Instrumentation},
+  booktitle =	 PLDI05,
+  address =	 {Chicago, IL},
+  pages =	 {190--200},
+  month =	 {June},
+  year =	 {2005}
+}
+
+@inproceedings {Seltzer96,
+author = {Margo I. Seltzer and Yasuhiro Endo and Christopher Small and Keith A. Smith},
+title = {Dealing With Disaster: Surviving Misbehaved Kernel Extensions},
+booktitle = {USENIX 2nd Symposium on OS Design and Implementation (OSDI 96)},
+year = {1996},
+address = {Seattle, WA},
+url = {https://www.usenix.org/conference/osdi-96/dealing-disaster-surviving-misbehaved-kernel-extensions},
+publisher = {USENIX Association},
+month = oct
+}
+
+
+@inproceedings{Bershad95,
+author = {Bershad, B. N. and Savage, S. and Pardyak, P. and Sirer, E. G. and Fiuczynski, M. E. and Becker, D. and Chambers, C. and Eggers, S.},
+title = {Extensibility Safety and Performance in the SPIN Operating System},
+year = {1995},
+isbn = {0897917154},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/224056.224077},
+doi = {10.1145/224056.224077},
+booktitle = {Proceedings of the Fifteenth ACM Symposium on Operating Systems Principles},
+pages = {267–283},
+numpages = {17},
+location = {Copper Mountain, Colorado, USA},
+series = {SOSP '95}
+}
+
+
+@inproceedings{Swift03,
+author = {Swift, Michael M. and Bershad, Brian N. and Levy, Henry M.},
+title = {Improving the Reliability of Commodity Operating Systems},
+year = {2003},
+isbn = {1581137575},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/945445.945466},
+doi = {10.1145/945445.945466},
+booktitle = {Proceedings of the Nineteenth ACM Symposium on Operating Systems Principles},
+pages = {207–222},
+numpages = {16},
+keywords = {virtual memory, protection, recovery, device drivers, I/O},
+location = {Bolton Landing, NY, USA},
+series = {SOSP '03}
+}
+
+
+@inproceedings{Gershuni19,
+author = {Gershuni, Elazar and Amit, Nadav and Gurfinkel, Arie and Narodytska, Nina and Navas, Jorge A. and Rinetzky, Noam and Ryzhyk, Leonid and Sagiv, Mooly},
+title = {Simple and Precise Static Analysis of Untrusted Linux Kernel Extensions},
+year = {2019},
+isbn = {9781450367127},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3314221.3314590},
+doi = {10.1145/3314221.3314590},
+booktitle = {Proceedings of the 40th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+pages = {1069–1084},
+numpages = {16},
+keywords = {linux, kernel extensions, ebpf, static analysis},
+location = {Phoenix, AZ, USA},
+series = {PLDI 2019}
+}
+
+@inproceedings{Zhu23,
+author = {Zhu, Xiangfeng and She, Guozhen and Xue, Bowen and Zhang, Yu and Zhang, Yongsu and Zou, Xuan Kelvin and Duan, XiongChun and He, Peng and Krishnamurthy, Arvind and Lentz, Matthew and Zhuo, Danyang and Mahajan, Ratul},
+title = {Dissecting Overheads of Service Mesh Sidecars},
+year = {2023},
+isbn = {9798400703874},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3620678.3624652},
+doi = {10.1145/3620678.3624652},
+abstract = {Service meshes play a central role in the modern application ecosystem by providing an easy and flexible way to connect microservices of a distributed application. However, because of how they interpose on application traffic, they can substantially increase application latency and its resource consumption. We develop a tool called MeshInsight to help developers quantify the overhead of service meshes in deployment scenarios of interest and make informed trade-offs about their functionality vs. overhead. Using MeshInsight, we confirm that service meshes can have high overhead---up to 269\% higher latency and up to 163\% more virtual CPU cores for our benchmark applications---but the severity is intimately tied to how they are configured and the application workload. IPC (inter-process communication) and socket writes dominate when the service mesh operates as a TCP proxy, but protocol parsing dominates when it operates as an HTTP proxy. MeshInsight also enables us to study the end-to-end impact of optimizations to service meshes. We show that not all seemingly-promising optimizations lead to a notable overhead reduction in realistic settings.},
+booktitle = {Proceedings of the 2023 ACM Symposium on Cloud Computing},
+pages = {142–157},
+numpages = {16},
+keywords = {Microservices, Service Mesh, Cloud computing},
+location = {, Santa Cruz, CA, USA, },
+series = {SoCC '23}
+}
+
+@misc{libbpf,
+  author = {libbpf Authors},
+  title = {Libbpf},
+  note={\url{https://libbpf.readthedocs.io/en/latest/libbpf_overview.html}}
+}
+
+@misc{find,
+  author = {find Authors},
+  title = {find command in Linux},
+  note={\url{https://linux.die.net/man/1/find}}
+}
+@inproceedings{levis2023case,
+  title={A Case Against CXL Memory Pooling},
+  author={Levis, Philip and Lin, Kun and Tai, Amy},
+  booktitle={Proceedings of the 22nd ACM Workshop on Hot Topics in Networks},
+  pages={18--24},
+  year={2023}
+}
+@article{yang2023cxlmemsim,
+  title={CXLMemSim: A pure software simulated CXL. mem for performance characterization},
+  author={Yang, Yiwei and Safayenikoo, Pooneh and Ma, Jiacheng and Khan, Tanvir Ahmed and Quinn, Andrew},
+  journal={arXiv preprint arXiv:2303.06153},
+  year={2023}
+}
+@inproceedings{guo2023mira,
+  title={Mira: A program-behavior-guided far memory system},
+  author={Guo, Zhiyuan and He, Zijian and Zhang, Yiying},
+  booktitle={Proceedings of the 29th Symposium on Operating Systems Principles},
+  pages={692--708},
+  year={2023}
+}
+@inproceedings{ruan2020aifm,
+  title={$\{$AIFM$\}$:$\{$High-Performance$\}$,$\{$Application-Integrated$\}$ far memory},
+  author={Ruan, Zhenyuan and Schwarzkopf, Malte and Aguilera, Marcos K and Belay, Adam},
+  booktitle={14th USENIX Symposium on Operating Systems Design and Implementation (OSDI 20)},
+  pages={315--332},
+  year={2020}
+}
+@inproceedings{exo,
+  title={EXO: Accelerating Storage Paravirtualization with eBPF},
+  author={Shi Qiu, Li Wang and Yiming Zhang},
+  booktitle={SC24: International Conference for High Performance Computing, Networking, Storage and Analysis},
+  pages={1--15},
+  year={2024},
+  organization={IEEE}
+}
+@inproceedings{lund2022interface,
+  title={I/O interface independence with xNVMe},
+  author={Lund, Simon AF and Bonnet, Philippe and Jensen, Klaus BA and Gonzalez, Javier},
+  booktitle={Proceedings of the 15th ACM International Conference on Systems and Storage},
+  pages={108--119},
+  year={2022}
+}
+@inproceedings{ren2023performance,
+  title={Performance characterization of modern storage stacks: Posix i/o, libaio, spdk, and io\_uring},
+  author={Ren, Zebin and Trivedi, Animesh},
+  booktitle={Proceedings of the 3rd Workshop on Challenges and Opportunities of Efficient and Performant Storage Systems},
+  pages={35--45},
+  year={2023}
+}
+
+@inproceedings{kflex,
+  title={Fast, Flexible, and Practical Kernel Extensions},
+  author={Dwivedi, Kumar Kartikeya and Iyer, Rishabh and Kashyap, Sanidhya},
+  booktitle={Proceedings of the ACM SIGOPS 30th Symposium on Operating Systems Principles},
+  pages={249--264},
+  year={2024}
+}
+@inproceedings{zhang2021demikernel,
+  author       = {Zhang, Irene and Raybuck, Amanda and Patel, Pratyush and Olynyk, Kirk and Nelson, Jacob and Navarro Leija, Omar S. and Martinez, Ashlie and Liu, Jing and Simpson, Anna Kornfeld and Jayakar, Sujay and Penna, Pedro Henrique and Demoulin, Max and Choudhury, Piali and Badam, Anirudh},
+  title        = {The Demikernel Datapath OS Architecture for Microsecond-scale Datacenter Systems},
+  booktitle    = {Proceedings of the 28th ACM Symposium on Operating Systems Principles (SOSP)},
+  year         = {2021},
+  pages        = {195--211},
+  address      = {Virtual Event, Germany},
+  publisher    = {ACM},
+  doi          = {10.1145/3477132.3483569},
+}
+
+@inproceedings{ousterhout2019shenango,
+  author       = {Ousterhout, Amy Elizabeth and Fried, Joshua and Behrens, Jonathan and Belay, Adam and Balakrishnan, Hari},
+  title        = {Shenango: Achieving High CPU Efficiency for Latency-sensitive Datacenter Workloads},
+  booktitle    = {Proceedings of the 16th USENIX Symposium on Networked Systems Design and Implementation (NSDI)},
+  year         = {2019},
+  publisher    = {USENIX Association},
+}
+
+@inproceedings{fried2020caladan,
+  author       = {Fried, Joshua and Ruan, Zhenyuan and Ousterhout, Amy and Belay, Adam},
+  title        = {Caladan: Mitigating Interference at Microsecond Timescales},
+  booktitle    = {Proceedings of the 14th USENIX Symposium on Operating Systems Design and Implementation (OSDI)},
+  year         = {2020},
+  pages        = {281--297},
+  publisher    = {USENIX Association},
+}
+
+@inproceedings{raghavan2023cornflakes,
+  author       = {Raghavan, Deepti and Ravi, Shreya and Yuan, Gina and Thaker, Pratiksha and Srivastava, Sanjari and Murray, Micah and Penna, Pedro Henrique and Ousterhout, Amy and Levis, Philip and Zaharia, Matei and Zhang, Irene},
+  title        = {Cornflakes: Zero-Copy Serialization for Microsecond-Scale Networking},
+  booktitle    = {Proceedings of the 29th ACM Symposium on Operating Systems Principles (SOSP)},
+  year         = {2023},
+  pages        = {1--16},
+  address      = {Koblenz, Germany},
+  doi          = {10.1145/3600006.3613137},
+}
+
+@misc{dpdk2023,
+  author       = {{The Linux Foundation}},
+  title        = {{Data Plane Development Kit (DPDK)}},
+  year         = {2023},
+  howpublished = {\url{https://www.dpdk.org}},
+}
+
+@inproceedings{fried2024junction,
+  author       = {Fried, Joshua and Chaudhry, Gohar Irfan and Saurez, Enrique and Choukse, Esha and Goiri, {\'I}{\~n}igo and Elnikety, Sameh and Fonseca, Rodrigo and Belay, Adam},
+  title        = {Making Kernel Bypass Practical for the Cloud with Junction},
+  booktitle    = {Proceedings of the 21st USENIX Symposium on Networked Systems Design and Implementation (NSDI)},
+  year         = {2024},
+  address      = {Santa Clara, CA},
+  publisher    = {USENIX Association},
+}
+
+@inproceedings{peng2025pegasus,
+  author       = {Peng, Dinglan and Liu, Congyu and Palit, Tapti and Vahldiek-Oberwagner, Anjo and Vij, Mona and Fonseca, Pedro},
+  title        = {Pegasus: Transparent and Unified Kernel-Bypass Networking for Fast Local and Remote Communication},
+  booktitle    = {Proceedings of the 20th European Conference on Computer Systems (EuroSys)},
+  year         = {2025},
+  pages        = {360--373},
+  address      = {Rotterdam, Netherlands},
+  publisher    = {ACM},
+  doi          = {10.1145/3689031.3696083},
+}
+
+@inproceedings{Ousterhout1990,
+  author    = {John K. Ousterhout},
+  title     = {Why Aren't Operating Systems Getting Faster As Fast as Hardware?},
+  booktitle = {Proceedings of the {USENIX} Summer Conference},
+  year      = {1990},
+  pages     = {247--256}
+}
+
+@article{Pu1988,
+  author  = {Calton Pu and Henry Massalin and John Ioannidis},
+  title   = {The Synthesis Kernel},
+  journal = {Computing Systems},
+  volume  = {1},
+  number  = {1},
+  pages   = {11--32},
+  year    = {1988}
+}
+
+@inproceedings{Pu1995,
+  author    = {Calton Pu and Timothy Autrey and Andrew Black and Charles Consel and 
+               Crispin Cowan and Jonathan Inouye and Lakshman Kethana and 
+               John Walpole and K. Zhang},
+  title     = {Optimistic Incremental Specialization: Streamlining a Commercial Operating System},
+  booktitle = {Proceedings of the 15th ACM Symposium on Operating Systems Principles ({SOSP}~'95)},
+  year      = {1995},
+  pages     = {314--324}
+}
+
+@techreport{Rajagopalan2002,
+  author      = {Mohan Rajagopalan and Saumya K. Debray and Matti Hiltunen and 
+                 Richard D. Schlichting},
+  title       = {System Call Clustering: A Profile-Directed Optimization Technique},
+  institution = {University of Arizona},
+  year        = {2002},
+  note        = {Tech. Report}
+}
+
+@inproceedings{Soares2010,
+  author    = {Livio Soares and Michael Stumm},
+  title     = {{FlexSC}: Flexible System Call Scheduling with Exception-Less System Calls},
+  booktitle = {Proceedings of the 9th USENIX Symposium on Operating Systems Design and Implementation ({OSDI}~'10)},
+  year      = {2010},
+  pages     = {33--46}
+}
+
+@inproceedings{Han2012,
+  author    = {Sangjin Han and Scott Marshall and Byung-Gon Chun and Sylvia Ratnasamy},
+  title     = {{MegaPipe}: A New Programming Interface for Scalable Network I/O},
+  booktitle = {Proceedings of the 10th USENIX Symposium on Operating Systems Design and Implementation ({OSDI}~'12)},
+  year      = {2012},
+  pages     = {135--148}
+}
+
+@inproceedings{Peter2014,
+  author    = {Simon Peter and Jialin Li and Irene Zhang and Dan R.~K. Ports and 
+               Doug Woos and Arvind Krishnamurthy and Thomas E. Anderson and Timothy Roscoe},
+  title     = {{Arrakis}: The Operating System is the Control Plane},
+  booktitle = {Proceedings of the 11th USENIX Symposium on Operating Systems Design and Implementation ({OSDI}~'14)},
+  year      = {2014},
+  pages     = {1--16}
+}
+
+@inproceedings{Belay2014,
+  author    = {Adam Belay and George Prekas and Ana Klimovic and Samuel Grossman and 
+               Christos Kozyrakis and Edouard Bugnion},
+  title     = {{IX}: A Protected Dataplane Operating System for High Throughput and Low Latency},
+  booktitle = {Proceedings of the 11th USENIX Symposium on Operating Systems Design and Implementation ({OSDI}~'14)},
+  year      = {2014},
+  pages     = {49--65}
+}
+
+@misc{Axboe2019,
+  author       = {Jens Axboe},
+  title        = {Efficient IO with io\_uring},
+  howpublished = {{Linux Kernel} report},
+  year         = {2019},
+  note         = {\\url{https://kernel.dk/io_uring.pdf}}
+}
+
+@inproceedings{Cheng2022,
+  author    = {Yu-Cheng Cheng and Ching-Chun Huang and Chia-Heng Tu},
+  title     = {{ESCA}: Effective System Call Aggregation for Event-Driven Servers},
+  booktitle = {2022 30th Euromicro International Conference on Parallel, Distributed and Network-based Processing ({PDP}~2022)},
+  year      = {2022},
+  pages     = {18--25},
+  doi       = {10.1109/PDP55904.2022.00012}
+}
+
+@inproceedings{Kuznetsov2022,
+  author    = {Dmitry Kuznetsov and Adam Morrison},
+  title     = {Privbox: Faster System Calls Through Sandboxed Privileged Execution},
+  booktitle = {Proceedings of the 2022 {USENIX} Annual Technical Conference ({USENIX}~ATC~'22)},
+  year      = {2022},
+  publisher = {{USENIX} Association}
+}
+@inproceedings{flexsc,
+  title={$\{$FlexSC$\}$: Flexible system call scheduling with $\{$Exception-Less$\}$ system calls},
+  author={Soares, Livio and Stumm, Michael},
+  booktitle={9th USENIX Symposium on Operating Systems Design and Implementation (OSDI 10)},
+  year={2010}
+}
+
+@inproceedings{ix,
+  title={$\{$IX$\}$: a protected dataplane operating system for high throughput and low latency},
+  author={Belay, Adam and Prekas, George and Klimovic, Ana and Grossman, Samuel and Kozyrakis, Christos and Bugnion, Edouard},
+  booktitle={11th USENIX Symposium on Operating Systems Design and Implementation (OSDI 14)},
+  pages={49--65},
+  year={2014}
+}
+@misc{3fs,
+  author       = {High Flyer Hedge Fund Team},
+  title        = {Fire-Flyer File System},
+  howpublished = {\url{https://github.com/deepseek-ai/3FS}},
+  note         = {Accessed: 2025-05-12},
+  year         = {2025}
+}
+@misc{zhao2025insightsdeepseekv3scalingchallenges,
+      title={Insights into DeepSeek-V3: Scaling Challenges and Reflections on Hardware for AI Architectures}, 
+      author={Chenggang Zhao and Chengqi Deng and Chong Ruan and Damai Dai and Huazuo Gao and Jiashi Li and Liyue Zhang and Panpan Huang and Shangyan Zhou and Shirong Ma and Wenfeng Liang and Ying He and Yuqing Wang and Yuxuan Liu and Y. X. Wei},
+      year={2025},
+      eprint={2505.09343},
+      archivePrefix={arXiv},
+      primaryClass={cs.DC},
+      url={https://arxiv.org/abs/2505.09343}, 
+}
+@inproceedings{du2024understanding,
+  title={Understanding Delays in AF\_XDP-based Applications},
+  author={du Perron, Killian Castillon and Pacheco, Dino Lopez and Huet, Fabrice},
+  booktitle={ICC 2024-IEEE International Conference on Communications},
+  pages={5497--5502},
+  year={2024},
+  organization={IEEE}
+}
+@inproceedings{xu2024ionia,
+  title={$\{$IONIA$\}$:$\{$High-Performance$\}$ Replication for Modern Disk-based $\{$KV$\}$ Stores},
+  author={Xu, Yi and Zhu, Henry and Pandey, Prashant and Conway, Alex and Johnson, Rob and Ganesan, Aishwarya and Alagappan, Ramnatthan},
+  booktitle={22nd USENIX Conference on File and Storage Technologies (FAST 24)},
+  pages={225--241},
+  year={2024}
+}
+@misc{zhu2025intro,
+  author       = {Henry Zhu},
+  title        = {{An Intro to DeepSeek's Distributed File System}},
+  howpublished = {\url{https://maknee.github.io/blog/2025/3FS-Performance-Journal-1/}},
+  month        = {April},
+  day          = {15},
+  year         = {2025},
+  note         = {Blog post}
+}

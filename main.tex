@@ -87,7 +87,7 @@
 \newcommand{\todo}[1]{\grumbler{olive}{todo}{#1}}
 
 
-\title{\sys: Seamless Kernel-Bypass for Composite Disk+Network Workloads via eBPF-Powered Syscall Chaining}
+\title{\sys: Bridging Disk and Network Domains with eBPF}
 % anyauthor declaration will be ignored  when using 'pldi' option (for double blind review)
 %
 
@@ -101,7 +101,7 @@ Anonymous Authors
 \begin{document}
 
 \begin{abstract}
-Modern data-driven services like distributed analytical databases incur high tail-latencies because each storage operation (\texttt{read}) and network operation (\texttt{send}/\texttt{recv}) triggers a separate user-kernel crossing. While \texttt{io\_uring} accelerates block I/O and AF\_XDP accelerates packet I/O, no solution chains them end-to-end in a unified framework. We introduce \sys, a hybrid I/O-bypass framework that transparently live-patches POSIX I/O calls into a unified submission queue, and coordinates disk and network operations via shared BPF maps. By chaining these bypass paths with in-kernel eBPF programs, \sys achieves near zero-copy, batched I/O across domains, without modifying application source code. Our preliminary evaluation on ClickHouse TPC-H queries shows up to 4× higher IOPS and 30% reduction in CPU utilization compared to standalone \texttt{io\_uring} or DPDK-based implementations, all without application changes.
+Modern data-driven services like distributed analytical databases incur high tail-latencies because each storage operation (\texttt{read}) and network operation (\texttt{send}/\texttt{recv}) triggers a separate user-kernel crossing. While \texttt{io\_uring} accelerates block I/O and AF\_XDP accelerates packet I/O, no solution chains them end-to-end in a unified framework. We introduce \sys, a hybrid I/O-bypass framework that transparently live-patches POSIX I/O calls into a unified submission queue, and coordinates disk and network operations via shared BPF maps. By chaining these bypass paths with in-kernel eBPF programs, \sys achieves near zero-copy, batched I/O across domains, without modifying application source code. Our preliminary evaluation on ClickHouse TPC-H queries shows up to 4× higher IOPS and 30\% reduction in CPU utilization compared to standalone \texttt{io\_uring} or DPDK-based implementations, all without application changes.
 \end{abstract}
 
 \maketitle
@@ -114,7 +114,16 @@ A typical OLAP query in a distributed system like ClickHouse follows this path: 
 
 Recent kernel innovations have addressed individual domains: \texttt{io\_uring} provides an asynchronous, batched interface for storage I/O, while AF\_XDP enables zero-copy, kernel-bypass networking. However, these mechanisms remain siloed - \texttt{io\_uring} still pays full cost for network operations, and AF\_XDP doesn't accelerate disk access.
 
-We introduce \sys, a unified syscall-chaining framework that fuses both bypass paths. Our solution dynamically rewrites POSIX I/O calls into batched \texttt{io\_uring} submissions using bpftime-like uprobes, eliminating redundant transitions between user and kernel space. We bridge storage and network domains through shared BPF maps and zero-copy memory regions, enabling direct data flow without intermediate copies. The framework coordinates cross-domain operations to preserve correctness while minimizing context switches, maintaining proper ordering and dependencies between related I/O operations. Finally, we adaptively optimize for tail latency through intelligent batching and prioritization mechanisms that adjust to workload characteristics in real-time.
+We introduce \sys, a unified syscall-chaining framework that fuses both bypass paths by:
+\begin{itemize}[leftmargin=*,itemsep=0pt]
+  \item Dynamically rewriting POSIX I/O calls into batched \texttt{io\_uring} submissions using bpftime-like uprobes.
+  
+  \item Bridging storage and network domains through shared BPF maps and zero-copy memory regions.
+  
+  \item Coordinating cross-domain operations to preserve correctness while minimizing context switches.
+  
+  \item Adaptively optimizing for tail latency through intelligent batching and prioritization.
+\end{itemize}
 
 \sys requires no application code changes - it transparently intercepts syscalls via binary rewriting and USDT probes, then redirects them through a unified bypass path. By chaining I/O operations across domains, \sys dramatically reduces query latency for composite workloads like distributed OLAP engines.
 
@@ -165,11 +174,11 @@ We evaluated \sys on ClickHouse (v21.8) running on CloudLab servers with Intel X
 
 \subsection{TPC-H Performance}
 
-We measured performance using TPC-H at scale factor 20 on a single NVMe-SSD, comparing our SQPOLL + HugePage + Registered-File configuration against a Thread-poll + pread baseline. For I/O-bound queries such as Q6, average latency improves by up to 23%, decreasing from 0.637s to 0.490s. When running a narrow column scan (SELECT SUM(LENGTH(l\_comment))), latency improves by 27.3%, dropping from 0.616s to 0.447s. Row throughput increases by up to 39% for I/O-dominated workloads, directly reflecting the elimination of syscall and context switch overhead. Most critically, 99th-percentile latency for short-running metadata queries improves by 3.2×, from 25.4ms to 7.9ms, directly addressing the high-percentile latency outliers that impact interactive analytics and dashboard responsiveness.
+We measured performance using TPC-H at scale factor 20 on a single NVMe-SSD, comparing our SQPOLL + HugePage + Registered-File configuration against a Thread-poll + pread baseline. For I/O-bound queries such as Q6, average latency improves by up to 23\%, decreasing from 0.637s to 0.490s. When running a narrow column scan (SELECT SUM(LENGTH(l\_comment))), latency improves by 27.3\%, dropping from 0.616s to 0.447s. Row throughput increases by up to 39\% for I/O-dominated workloads, directly reflecting the elimination of syscall and context switch overhead. Most critically, 99th-percentile latency for short-running metadata queries improves by 3.2×, from 25.4ms to 7.9ms, directly addressing the high-percentile latency outliers that impact interactive analytics and dashboard responsiveness.
 
 \subsection{Resource Utilization}
 
-Profiling shows where \sys eliminates overhead throughout the I/O path. Context switch overhead is reduced by up to 85%, reflecting our ability to batch and chain operations that would normally require separate system calls. Memory copy operations are reduced by up to 73% through our zero-copy architecture and shared memory regions. CPU utilization is lowered by 30% at equivalent throughput, freeing cores for additional application logic or increased query concurrency. Tail latency (p99) for distributed sharding operations drops by 68%, enabling more predictable query response times even under varied workload conditions.
+Profiling shows where \sys eliminates overhead throughout the I/O path. Context switch overhead is reduced by up to 85\%, reflecting our ability to batch and chain operations that would normally require separate system calls. Memory copy operations are reduced by up to 73\% through our zero-copy architecture and shared memory regions. CPU utilization is lowered by 30\% at equivalent throughput, freeing cores for additional application logic or increased query concurrency. Tail latency (p99) for distributed sharding operations drops by 68\%, enabling more predictable query response times even under varied workload conditions.
 
 For I/O-dominated workloads like SELECT SUM(LENGTH(l\_comment)), data throughput nearly doubles from 251.5MB/s to 475.5MB/s as zero-copy bypass and batching eliminate copy and syscall overhead. Under mixed scan-metadata workloads, our adaptive batching heuristic maintains 99th-percentile latency below 10ms, compared to 35ms with standalone \texttt{io\_uring} and 42ms with native syscalls.
 

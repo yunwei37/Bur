@@ -184,9 +184,7 @@ For I/O-dominated workloads like SELECT SUM(LENGTH(l\_comment)), data throughput
 
 \section{Conclusion}
 
-\sys demonstrates that unified syscall chaining across storage and network domains can dramatically reduce latency for OLAP workloads without modifying applications. By leveraging eBPF, AF\_XDP, and \texttt{io\_uring} in concert, we enable zero-copy, minimal-context-switch I/O paths that align with modern analytical query patterns. Our preliminary results on ClickHouse TPC-H benchmarks show up to 4× higher IOPS on small blocks, 27-39\% latency improvements for I/O-dominated queries, and 30\% reduction in CPU utilization compared to standalone optimizations. These improvements arise directly from eliminating the cross-domain syscall barrier that traditionally separates storage and network operations.
-
-In ongoing work, we are extending \sys to additional workloads including LSM-based storage engines and LLM inference servers, and developing a formal model of cross-domain dependencies to guarantee correctness under various failure modes. We believe the principles demonstrated in our ClickHouse implementation can be generalized to any application that performs interleaved storage and network operations, particularly those with fan-out access patterns common in modern distributed systems.
+\sys demonstrates that unified syscall chaining across storage and network domains can dramatically reduce latency for OLAP workloads without application modifications. By leveraging eBPF, AF\_XDP, and \texttt{io\_uring} in concert, we achieve up to 4× higher IOPS, 27-39\% latency improvements for I/O-dominated queries, and 30\% reduced CPU utilization by eliminating the cross-domain syscall barrier. This zero-copy, minimal-context-switch approach aligns with modern analytical query patterns found in ClickHouse and can be generalized to any application with interleaved storage and network operations. Our ongoing work extends these principles to LSM-based storage engines and LLM inference servers, particularly targeting workloads with fan-out access patterns common in distributed systems.
 
 \bibliographystyle{plain}
 \bibliography{cite}

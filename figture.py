@@ -10,7 +10,7 @@ latency_method2 = [1.36, 0.49, 0.45]    # ThreadPoll + pread
 improvements = [-9.0, -23.0, -27.3]     # % improvements
 
 # Plot
-fig, ax = plt.subplots(figsize=(10, 4))
+fig, ax = plt.subplots(figsize=(10, 3))
 
 # Positions for bars
 y_positions = range(len(queries))

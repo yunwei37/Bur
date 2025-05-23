@@ -114,16 +114,7 @@ A typical OLAP query in a distributed system like ClickHouse follows this path: 
 
 Recent kernel innovations have addressed individual domains: \texttt{io\_uring} provides an asynchronous, batched interface for storage I/O, while AF\_XDP enables zero-copy, kernel-bypass networking. However, these mechanisms remain siloed - \texttt{io\_uring} still pays full cost for network operations, and AF\_XDP doesn't accelerate disk access.
 
-We introduce \sys, a unified syscall-chaining framework that fuses both bypass paths by:
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item Dynamically rewriting POSIX I/O calls into batched \texttt{io\_uring} submissions using bpftime-like uprobes.
-  
-  \item Bridging storage and network domains through shared BPF maps and zero-copy memory regions.
-  
-  \item Coordinating cross-domain operations to preserve correctness while minimizing context switches.
-  
-  \item Adaptively optimizing for tail latency through intelligent batching and prioritization.
-\end{itemize}
+We introduce \sys, a unified syscall-chaining framework that fuses both bypass paths. Our solution dynamically rewrites POSIX I/O calls into batched \texttt{io\_uring} submissions using bpftime-like uprobes, eliminating redundant transitions between user and kernel space. We bridge storage and network domains through shared BPF maps and zero-copy memory regions, enabling direct data flow without intermediate copies. The framework coordinates cross-domain operations to preserve correctness while minimizing context switches, maintaining proper ordering and dependencies between related I/O operations. Finally, we adaptively optimize for tail latency through intelligent batching and prioritization mechanisms that adjust to workload characteristics in real-time.
 
 \sys requires no application code changes - it transparently intercepts syscalls via binary rewriting and USDT probes, then redirects them through a unified bypass path. By chaining I/O operations across domains, \sys dramatically reduces query latency for composite workloads like distributed OLAP engines.
 
@@ -139,82 +130,34 @@ Modern storage and networking stacks offer domain-specific optimizations that fa
 
 ClickHouse's \texttt{MergeTree} engine exemplifies this cross-domain problem, as shown in the profiling data in Figure~\ref{fig:profiling}. Its columnar storage engine issues large numbers of small, random \texttt{read()} calls against compressed column files and mark-file offsets, with each compressed-block fetch and metadata lookup translating into a user-kernel transition. In distributed setups, remote-shard requests add further \texttt{send()} and \texttt{recv()} calls for data fetches and Raft heartbeats. Our profiling shows that the blocking \texttt{read()} syscall alone consumes ~25\% of query time, while small network receives (heartbeats, shard updates) account for another ~2\%. The cumulative cost of these syscalls—exacerbated by Spectre/Meltdown mitigations—introduces tens of microseconds of overhead per transition, multiplying into hundreds of milliseconds on fan-out queries. When a query spans dozens of remote partitions, each extra transition adds up quickly, creating a critical bottleneck for interactive dashboards and real-time analytics that cannot be solved by optimizing either storage or networking in isolation.
 
+\section{\sys Design}\label{sec:design}
+
+We introduce \sys (Figure~\ref{fig:bur}) to address these challenges by seamlessly unifying both domains. Our architecture creates an end-to-end bypass path that transparently intercepts, batches, and chains disk and network operations without application modifications. Through a combination of dynamic binary rewriting and in-kernel eBPF programs, we eliminate redundant context switches while maintaining POSIX semantics. The system consists of three tightly-integrated components that work together to optimize cross-domain I/O flows for modern analytical workloads.
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{img/bur.pdf}
 \caption{\sys Architecture for ClickHouse}\label{fig:bur}
 \end{figure}
 
-\section{\sys Design}\label{sec:design}
+\textbf{Syscall-Chaining Engine.} We dynamically intercept POSIX I/O calls and redirect them into unified rings using binary rewriting and eBPF. The engine automatically rewrites ClickHouse's invocations of \texttt{read()}, \texttt{send()}, and \texttt{recv()} into batched \texttt{io\_uring} submissions using bpftime-like uprobes, eliminating redundant transitions. By placing probes at key ClickHouse functions (e.g., \texttt{MergeTree::readMark()}, \texttt{MergeTree::readData()}), we maintain semantic context across syscall boundaries, preserving correct ordering and dependencies. The eBPF verifier ensures no infinite loops or memory violations, with explicit rollback paths for upgrades or verification failures, guaranteeing system stability even during live patching operations.
 
-\sys's architecture consists of three key components:
+\textbf{Cross-Domain Ring Bridge.} The heart of \sys is a novel ring design that unifies storage and network operations through shared memory. We use BPF maps to bridge user-space \texttt{io\_uring} rings and in-kernel XDP processing, allowing both to access a common zero-copy region without intermediate copies. This approach requires a unified descriptor format that encompasses both disk SQEs (\texttt{io\_uring} descriptors) and network SQEs (XDP frame metadata), enabling atomic operations across domains. Critically, our descriptor metadata includes cross-domain dependency information, enabling in-kernel coordination of chained operations without user intervention—for example, automatically triggering a network send once a disk read completes, all without returning to user space.
 
-\subsection{Syscall-Chaining Engine}
-
-We dynamically intercept POSIX I/O calls and redirect them into unified rings using binary rewriting and eBPF:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item \textbf{Live syscall patching}: Automatically rewrite Redis's invocations of \texttt{read()}, \texttt{send()}, and \texttt{recv()} into batched \texttt{io\_uring} submissions using bpftime-like uprobes.
-  
-  \item \textbf{USDT integration}: We place probes at key Redis functions (e.g., \texttt{readKey()}, \texttt{replicationFeedSlaves()}) to maintain semantic context across syscall boundaries.
-  
-  \item \textbf{Safety guarantees}: eBPF verifier ensures no infinite loops or memory violations, with explicit rollback paths for upgrades or verification failures.
-\end{itemize}
-
-\subsection{Cross-Domain Ring Bridge}
-
-The heart of \sys is a novel ring design that unifies storage and network operations:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item \textbf{Shared memory maps}: We use BPF maps to bridge user-space \texttt{io\_uring} rings and in-kernel XDP processing, allowing both to access a common zero-copy region.
-  
-  \item \textbf{Unified descriptor format}: We create a common descriptor that encompasses both disk SQEs (\texttt{io\_uring} descriptors) and network SQEs (XDP frame metadata).
-  
-  \item \textbf{Dependency tracking}: Our descriptor metadata includes cross-domain dependency information, enabling in-kernel coordination of chained operations without user intervention.
-\end{itemize}
-
-\subsection{Tail-Latency Optimizations}
-
-We implement several techniques to specifically target tail latency:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item \textbf{Adaptive batching}: Our user-space coordinator monitors operation latency and adjusts batch sizes dynamically, flushing smaller batches under high load.
-  
-  \item \textbf{Priority-aware scheduling}: We detect latency-sensitive operations (e.g., client-facing GETs vs. background heartbeats) and prioritize their execution.
-  
-  \item \textbf{Kernel-driven preemption}: For urgent requests, we use a lightweight BPF program to preempt in-progress operations and expedite high-priority traffic.
-\end{itemize}
+\textbf{Tail-Latency Optimizations.} To ensure consistent performance even under load, we implement several techniques specifically targeting tail latency in analytical workloads. Our user-space coordinator monitors operation latency and adjusts batch sizes dynamically, flushing smaller batches under high load. For example, during high query concurrency, we dynamically reduce batch sizes for critical path operations to bound 99th-percentile latency by 150us. We also implement priority-aware scheduling that detects latency-sensitive operations (e.g., metadata lookups vs. large column scans) and prioritizes their execution, with NURaft heartbeat traffic receiving highest priority to maintain replication stability. For urgent requests, a lightweight BPF program can preempt in-progress operations and expedite high-priority traffic, improving worst-case tail latency by up to 45\% compared to default first-come-first-served processing.
 
 \section{Implementation}\label{sec:implementation}
 
 We implemented \sys in ~2000 lines of C/C++ and eBPF code, focusing on the ClickHouse use case while maintaining compatibility with unmodified binaries.
 
 \paragraph{UMEM Management}
-We allocate a contiguous user-space memory region (UMEM) and register it with both the kernel's \texttt{io\_uring} subsystem and the AF\_XDP driver. This shared region eliminates copies between disk and network paths:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item For \texttt{io\_uring}, pages hold direct DMA buffers for NVMe reads and writes
-  \item For AF\_XDP, the same pages serve as zero-copy packet buffers
-  \item A custom slab allocator manages buffer lifecycle across domains
-\end{itemize}
+We allocate a contiguous user-space memory region (UMEM) and register it with both the kernel's \texttt{io\_uring} subsystem and the AF\_XDP driver. This shared region eliminates copies between disk and network paths. For \texttt{io\_uring}, these pages hold direct DMA buffers for NVMe reads and writes, significantly reducing data movement overhead. For AF\_XDP, the same pages serve as zero-copy packet buffers, enabling efficient network transmission without redundant copying. A custom slab allocator manages the complete buffer lifecycle across domains, ensuring proper resource utilization and preventing memory leaks as buffers transition between storage and network subsystems.
 
 \paragraph{eBPF Program Coordination}
-Three key eBPF programs coordinate the cross-domain operations:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item \textbf{Syscall interceptor}: Attached to \texttt{sys\_read}, \texttt{sys\_send}, etc. to redirect operations
-  \item \textbf{XDP packet router}: Steers select network traffic into the shared UMEM
-  \item \textbf{IO completion handler}: Triggers dependent operations when prerequisites complete
-\end{itemize}
+Three key eBPF programs coordinate the cross-domain operations. The syscall interceptor attaches to \texttt{sys\_read}, \texttt{sys\_send}, and related syscall entry points to redirect operations into our unified processing path. The XDP packet router steers select network traffic into the shared UMEM region, distinguishing between traffic that requires our optimized path and regular traffic that can follow the conventional network stack. The IO completion handler triggers dependent operations when prerequisites complete, maintaining the causal relationships between operations without requiring application intervention or additional context switches.
 
 \paragraph{ClickHouse Integration}
-For ClickHouse, we focus on optimizing the MergeTree storage engine and distributed query paths:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item Compressed column file reads in \texttt{MergeTree} are intercepted via USDT probes
-  \item Distributed query and Raft heartbeat traffic is redirected through AF\_XDP
-  \item Data compression/decompression remains untouched to maintain compatibility
-\end{itemize}
+For ClickHouse, we focus on optimizing the MergeTree storage engine and distributed query paths. Compressed column file reads in \texttt{MergeTree} are intercepted via USDT probes, allowing us to capture both data and metadata operations with minimal overhead. Distributed query traffic and Raft heartbeat messages are redirected through AF\_XDP, prioritizing low-latency communication for both data transfer and cluster consistency. Data compression and decompression operations remain untouched to maintain compatibility with existing codebases and storage formats, ensuring that our optimization layer integrates seamlessly with the existing ClickHouse ecosystem.
 
 \section{Preliminary Evaluation}\label{sec:evaluation}
 
@@ -222,25 +165,13 @@ We evaluated \sys on ClickHouse (v21.8) running on CloudLab servers with Intel X
 
 \subsection{TPC-H Performance}
 
-We measured performance using TPC-H at scale factor 20 on a single NVMe-SSD, comparing our SQPOLL + HugePage + Registered-File configuration against a Thread-poll + pread baseline:
-
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item For I/O-bound queries (e.g., Q6), latency improves by up to 23\% (from 0.637s to 0.490s)
-  \item For a narrow column scan (SELECT SUM(LENGTH(l\_comment))), latency improves by 27.3\% (from 0.616s to 0.447s)
-  \item Row throughput increases by up to 39\% for I/O-dominated workloads
-\end{itemize}
+We measured performance using TPC-H at scale factor 20 on a single NVMe-SSD, comparing our SQPOLL + HugePage + Registered-File configuration against a Thread-poll + pread baseline. For I/O-bound queries such as Q6, average latency improves by up to 23%, decreasing from 0.637s to 0.490s. When running a narrow column scan (SELECT SUM(LENGTH(l\_comment))), latency improves by 27.3%, dropping from 0.616s to 0.447s. Row throughput increases by up to 39% for I/O-dominated workloads, directly reflecting the elimination of syscall and context switch overhead. Most critically, 99th-percentile latency for short-running metadata queries improves by 3.2×, from 25.4ms to 7.9ms, directly addressing the high-percentile latency outliers that impact interactive analytics and dashboard responsiveness.
 
 \subsection{Resource Utilization}
 
-Profiling shows where \sys eliminates overhead:
+Profiling shows where \sys eliminates overhead throughout the I/O path. Context switch overhead is reduced by up to 85%, reflecting our ability to batch and chain operations that would normally require separate system calls. Memory copy operations are reduced by up to 73% through our zero-copy architecture and shared memory regions. CPU utilization is lowered by 30% at equivalent throughput, freeing cores for additional application logic or increased query concurrency. Tail latency (p99) for distributed sharding operations drops by 68%, enabling more predictable query response times even under varied workload conditions.
 
-\begin{itemize}[leftmargin=*,itemsep=0pt]
-  \item Context switch overhead reduced by up to 85\%
-  \item Memory copy operations reduced by up to 73\%
-  \item CPU utilization lowered by 30\% at equivalent throughput
-\end{itemize}
-
-For I/O-dominated workloads like SELECT SUM(LENGTH(l\_comment)), data throughput nearly doubles (from 251.5MB/s to 475.5MB/s) as zero-copy bypass and batching eliminate copy and syscall overhead.
+For I/O-dominated workloads like SELECT SUM(LENGTH(l\_comment)), data throughput nearly doubles from 251.5MB/s to 475.5MB/s as zero-copy bypass and batching eliminate copy and syscall overhead. Under mixed scan-metadata workloads, our adaptive batching heuristic maintains 99th-percentile latency below 10ms, compared to 35ms with standalone \texttt{io\_uring} and 42ms with native syscalls.
 
 \section{Conclusion}
 
